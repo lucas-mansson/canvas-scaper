@@ -4,3 +4,5 @@ An idea for a canvas scraper that will scrape your courses and display all assig
 I may also have to add support for other sites, since some courses don't use canvas - maybe this will have to use some LLM magic.
 
 Just an idea atm, will see if and when I have time to implement.
+
+[Canvas API](https://developerdocs.instructure.com/services/canvas)

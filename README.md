@@ -6,3 +6,10 @@ I may also have to add support for other sites, since some courses don't use can
 Just an idea atm, will see if and when I have time to implement.
 
 [Canvas API](https://developerdocs.instructure.com/services/canvas)
+
+## How to use
+Create a `.env` file and add the following variable:
+```
+CANVAS_ACCESS_TOKEN =
+```
+The access token can be found by going to your [Canvas profile settigs](https://canvas.education.lu.se/profile/settings) and scrolling down to `Approved integrations` -> `+ New access token`.

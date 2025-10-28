@@ -23,6 +23,12 @@ export default async function Navbar() {
             >
               Calendar
             </Link>
+            <Link 
+              href="/announcements" 
+              className="text-gray-600 hover:text-gray-900 transition"
+            >
+              Announcements
+            </Link>
           </div>
         </div>
       </div>

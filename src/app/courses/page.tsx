@@ -37,7 +37,7 @@ export default function CoursesPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">My Canvas Courses</h1>
+      <h1 className="text-3xl font-bold mb-6">Courses</h1>
       
       <div className="space-y-4">
         {courses.map(course => (
@@ -45,15 +45,16 @@ export default function CoursesPage() {
             key={course.id} 
             className="border rounded-lg p-4 shadow hover:shadow-md transition"
           >
-            <h2 className="text-xl font-semibold">{course.name} <span className="text-gray-600">{course.course_code}</span></h2>
-            <span className="text-sm text-gray-500 mt-2">{course.id}</span>
+            <a target="_blank" href={`${process.env.NEXT_PUBLIC_CANVAS_BASE_URL}/courses/${course.id}`}>
+              <h2 className="text-xl font-semibold">{course.name} <span className="text-gray-600">{course.course_code}</span></h2>
+              {/* <span className="text-sm text-gray-500 mt-2">{course.id}</span> */}
+            </a>
           </div>
         ))}
       </div>
 
-      {courses.length === 0 && (
-        <p className="text-gray-500 text-center mt-8">No active courses</p>
-      )}
+      {courses.length === 0 && (<p className="text-gray-500 text-center mt-8">No active courses</p>)}
+
     </div>
   );
 }

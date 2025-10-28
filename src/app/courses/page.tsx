@@ -1,39 +1,31 @@
-'use client';
+import { Course } from '@/types';
 
-import { useEffect, useState } from 'react';
-import ErrorMessage from '@/components/ErrorMessage';
-import Loading from '@/components/Loading';
+async function getCourses(): Promise<Course[]> {
+  const CANVAS_API_URL = process.env.CANVAS_API_URL;
+  const CANVAS_ACCESS_TOKEN = process.env.CANVAS_ACCESS_TOKEN;
 
-interface Course {
-  id: number;
-  name: string;
-  course_code: string;
-  enrollment_term_id?: number;
+  // Add error checking
+  if (!CANVAS_API_URL || !CANVAS_ACCESS_TOKEN) {
+    throw new Error('Missing Canvas API credentials');
+  }
+
+  const url = new URL(`${CANVAS_API_URL}/courses`);
+  url.searchParams.append('enrollment_state', 'active');
+  url.searchParams.append('include[]', 'students');
+  url.searchParams.append('include[]', 'term');
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      'Authorization': `Bearer ${CANVAS_ACCESS_TOKEN}`,
+    },
+  });
+
+  return response.json();
 }
 
-export default function CoursesPage() {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch('/api/courses')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch courses');
-        return res.json();
-      })
-      .then(data => {
-        setCourses(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) { return <Loading />; }
-  if (error) { return <ErrorMessage message={error} />; }
+export default async function CoursesPage() {
+  
+  const courses = await getCourses();
 
   return (
     <div className="container mx-auto p-8">

@@ -22,7 +22,7 @@ export default async function CoursesPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">My Canvas Courses</h1>
+      <h1 className="text-3xl font-bold mb-6">Current active courses</h1>
       
       <div className="space-y-4">
         {courses.map((course: any) => (
@@ -31,7 +31,6 @@ export default async function CoursesPage() {
             className="border rounded-lg p-4 shadow"
           >
             <h2 className="text-xl font-semibold">{course.name}</h2>
-            <p className="text-gray-600">{course.course_code}</p>
           </div>
         ))}
       </div>

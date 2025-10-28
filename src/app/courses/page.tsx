@@ -1,39 +1,59 @@
-async function getCourses() {
-  const CANVAS_API_URL = process.env.CANVAS_API_URL;
-  const CANVAS_ACCESS_TOKEN = process.env.CANVAS_ACCESS_TOKEN;
+'use client';
 
-  const url = new URL(`${CANVAS_API_URL}/courses`);
-  url.searchParams.append('enrollment_state', 'active');
-  url.searchParams.append('include[]', 'students');
-  url.searchParams.append('include[]', 'term');
-  url.searchParams.append('per_page', '5');
+import { useEffect, useState } from 'react';
+import ErrorMessage from '@/components/ErrorMessage';
+import Loading from '@/components/Loading';
 
-  const response = await fetch(url.toString(), {
-    headers: {
-      'Authorization': `Bearer ${CANVAS_ACCESS_TOKEN}`,
-    },
-  });
-
-  return response.json();
+interface Course {
+  id: number;
+  name: string;
+  course_code: string;
+  enrollment_term_id?: number;
 }
 
-export default async function CoursesPage() {
-  const courses = await getCourses();
+export default function CoursesPage() {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/courses')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch courses');
+        return res.json();
+      })
+      .then(data => {
+        setCourses(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) { return <Loading />; }
+  if (error) { return <ErrorMessage message={error} />; }
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">Current active courses</h1>
+      <h1 className="text-3xl font-bold mb-6">My Canvas Courses</h1>
       
       <div className="space-y-4">
-        {courses.map((course: any) => (
+        {courses.map(course => (
           <div 
             key={course.id} 
-            className="border rounded-lg p-4 shadow"
+            className="border rounded-lg p-4 shadow hover:shadow-md transition"
           >
-            <h2 className="text-xl font-semibold">{course.name}</h2>
+            <h2 className="text-xl font-semibold">{course.name} <span className="text-gray-600">{course.course_code}</span></h2>
+            <span className="text-sm text-gray-500 mt-2">{course.id}</span>
           </div>
         ))}
       </div>
+
+      {courses.length === 0 && (
+        <p className="text-gray-500 text-center mt-8">No active courses</p>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Course } from '@/types';
+import { Course } from "@/types";
 
 async function getCourses(): Promise<Course[]> {
   const CANVAS_API_URL = process.env.CANVAS_API_URL;
@@ -24,17 +24,16 @@ async function getCourses(): Promise<Course[]> {
 }
 
 export default async function CoursesPage() {
-  
+
   const courses = await getCourses();
 
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6">Courses</h1>
-      
       <div className="space-y-4">
         {courses.map(course => (
-          <div 
-            key={course.id} 
+          <div
+            key={course.id}
             className="border rounded-lg p-4 shadow hover:shadow-md transition"
           >
             <a target="_blank" href={`${process.env.NEXT_PUBLIC_CANVAS_BASE_URL}/courses/${course.id}`}>
